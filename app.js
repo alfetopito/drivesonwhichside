@@ -19,7 +19,8 @@ app.config(function ($routeProvider) {
 app.factory('countryFactory', ['$http', '$log', '$q', function ($http, $log) {
   var countriesPromise = null,
     fetchCountriesPromise,
-    getCountry;
+    getDrivingSide,
+    getCountries;
 
   fetchCountriesPromise = function () {
     $log.debug('fetching promise');
@@ -33,32 +34,49 @@ app.factory('countryFactory', ['$http', '$log', '$q', function ($http, $log) {
     return countriesPromise;
   };
 
-  getCountry = function (country) {
+  getDrivingSide = function (country) {
     return fetchCountriesPromise().then(function (data) {
       return data[country];
     });
   };
 
+  getCountries = function () {
+    return fetchCountriesPromise().then(function (data) {
+      return Object.keys(data).sort();
+    })
+  };
+
   return {
-    getCountry: getCountry
+    getDrivingSide: getDrivingSide,
+    getCountries: getCountries
   };
 }]);
 
 // CONTROLLERS
-app.controller('mainController', ['$location', 'countryFactory',
-  function ($location, countryFactory) {
-    countryFactory.getCountry('a');
-    this.submit = function () {
-      if (this.country) {
-        $location.path(this.country);
+app.controller('mainController', ['$scope', '$location', '$filter', 'countryFactory', '$log',
+  function ($scope, $location, $filter, countryFactory, $log) {
+    $scope.countryNames = [];
+    countryFactory.getCountries().then(function (data) {
+      $scope.countryNames = data;
+    });
+    $scope.submit = function () {
+      if ($scope.country) {
+        $location.path($scope.country);
       }
-    }
+    };
+    $scope.countryNameClick = function (name) {
+      $scope.country = name;
+      $scope.submit();
+    };
 }]);
 
-app.controller('countryController', ['$routeParams', '$scope', '$log', 'countryFactory',
-  function ($routeParams, $scope, $log, countryFactory) {
+app.controller('countryController', ['$routeParams', '$scope', '$location', 'countryFactory',
+  function ($routeParams, $scope, $location, countryFactory) {
     $scope.country = $routeParams.country || 'Brazil';
-    countryFactory.getCountry($scope.country).then(function (data) {
+    countryFactory.getDrivingSide($scope.country).then(function (data) {
       $scope.side = data;
+      if (!$scope.side) {
+        $location.path('/');
+      }
     });
 }]);

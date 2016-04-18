@@ -1,7 +1,14 @@
-<form ng-submit="mainC.submit()">
+<form ng-submit="submit()">
     <div class="form-group">
-        <input type="text" placeholder="Country" ng-model="mainC.country" />
+        <input type="text" placeholder="Country" ng-model="country" />
         <input type="submit" value="Drives on which side?" />
     </div>
 </form>
-<h1>{{ mainC.country }}</h1>
+<h1>{{ country }}</h1>
+<div>
+    <ul class="btn-group" role="group">
+        <li class="btn btn-default"
+            ng-repeat="name in countryNames|filter:country"
+            ng-click="countryNameClick(name)">{{ name }}</li>
+    </ul>
+</div>
