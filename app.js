@@ -55,6 +55,7 @@ app.factory('countryFactory', ['$http', '$log', '$q', function ($http, $log) {
 // CONTROLLERS
 app.controller('mainController', ['$scope', '$location', '$filter', 'countryFactory', '$log',
   function ($scope, $location, $filter, countryFactory, $log) {
+    $scope.country = '';
     $scope.countryNames = [];
     countryFactory.getCountries().then(function (data) {
       $scope.countryNames = data;
