@@ -71,11 +71,13 @@ app.controller('mainController', ['$scope', '$location', '$filter', 'countryFact
     };
 }]);
 
-app.controller('countryController', ['$routeParams', '$scope', '$location', 'countryFactory',
-  function ($routeParams, $scope, $location, countryFactory) {
+app.controller('countryController', ['$routeParams', '$scope', '$location', 'countryFactory', '$log',
+  function ($routeParams, $scope, $location, countryFactory, $log) {
     $scope.country = $routeParams.country || 'Brazil';
     countryFactory.getDrivingSide($scope.country).then(function (data) {
+      $log.info('Country: ' + $scope.country);
       $scope.side = data;
+      $log.info('Side: ' + $scope.side);
       if (!$scope.side) {
         $location.path('/');
       }
