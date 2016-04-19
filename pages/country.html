@@ -1,1 +1,10 @@
-<h1><strong>{{ country }}</strong> drives on the <strong>{{ side }}</strong> side.</h1>
+<div class="row text-center">
+  <div class="row">
+    <div style="font-size: 4em;">
+      <span class="glyphicon glyphicon-arrow-left" ng-if="side == 'left'"></span>
+      <span class="glyphicon glyphicon-road"></span>
+      <span class="glyphicon glyphicon-arrow-right" ng-if="side == 'right'"></span>
+    </div>
+  </div>
+  <h1><strong>{{ country }}</strong> drives on the <strong>{{ side }}</strong> side.</h1>
+</div>
